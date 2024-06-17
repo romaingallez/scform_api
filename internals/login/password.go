@@ -4,7 +4,7 @@ import (
 	"github.com/romaingallez/scform_api/internals/models"
 )
 
-func LoginWithPassword(page models.Page) error {
+func LoginWithPassword(page models.Page) (models.Page, error) {
 
 	// 	page.Page.MustElementByJS(`document.querySelector("#MainContent_LoginUser_UserName")`).MustInput(page.User.Username)
 	page.Page.MustElementByJS(`() => document.querySelector("#MainContent_LoginUser_UserName")`).MustInput(page.User.Username)
@@ -14,6 +14,8 @@ func LoginWithPassword(page models.Page) error {
 	page.Page.MustWaitDOMStable()
 
 	cookies := page.Page.Browser().MustGetCookies()
-	WriteJsonCookies("cookies.json", cookies)
-	return nil
+
+	page.User.Cookies = cookies
+	// WriteJsonCookies("cookies.json", cookies)
+	return page, nil
 }
